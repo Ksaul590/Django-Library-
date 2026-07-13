@@ -1,0 +1,755 @@
+html
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Registro de Usuario{% endblock %}
+
+{% block extra_css %}
+<style>
+
+    .bc-register-wrapper {
+        min-height:      calc(100vh - 64px - 56px);
+        display:         flex;
+        align-items:     center;
+        justify-content: center;
+        padding:         2.5rem 1rem;
+        background:      linear-gradient(
+                            145deg,
+                            #f0f5ff 0%,
+                            #f8fafc 50%,
+                            #eef2ff 100%
+                         );
+    }
+
+    .bc-register-card {
+        background-color: #ffffff;
+        border:           1px solid #e2e8f0;
+        border-radius:    16px;
+        box-shadow:       0 8px 32px rgba(13, 43, 94, 0.10),
+                          0 2px  8px rgba(13, 43, 94, 0.06);
+        width:            100%;
+        max-width:        720px;
+        overflow:         hidden;
+    }
+
+    .bc-register-header {
+        background:      linear-gradient(135deg, #0d2b5e 0%, #1a4fa0 100%);
+        padding:         2rem 2.5rem 1.75rem;
+        text-align:      center;
+        position:        relative;
+        overflow:        hidden;
+    }
+
+    .bc-register-header::before,
+    .bc-register-header::after {
+        content:          '';
+        position:         absolute;
+        border-radius:    50%;
+        background-color: rgba(255, 255, 255, 0.05);
+        pointer-events:   none;
+    }
+
+    .bc-register-header::before {
+        width:  180px;
+        height: 180px;
+        top:    -60px;
+        right:  -40px;
+    }
+
+    .bc-register-header::after {
+        width:  120px;
+        height: 120px;
+        bottom: -50px;
+        left:   -30px;
+    }
+
+    .bc-register-icon-wrap {
+        width:            68px;
+        height:           68px;
+        background-color: rgba(255, 255, 255, 0.12);
+        border:           2px solid rgba(255, 255, 255, 0.20);
+        border-radius:    16px;
+        display:          inline-flex;
+        align-items:      center;
+        justify-content:  center;
+        margin-bottom:    1rem;
+    }
+
+    .bc-register-icon-wrap .bi {
+        font-size: 2rem;
+        color:     #90b8f8;
+    }
+
+    .bc-register-header h1 {
+        font-size:      1.45rem;
+        font-weight:    700;
+        color:          #ffffff;
+        margin-bottom:  0.3rem;
+        letter-spacing: 0.01em;
+        position:       relative;
+        z-index:        1;
+    }
+
+    .bc-register-header p {
+        font-size:   0.82rem;
+        color:       #90b8f8;
+        margin:      0;
+        font-weight: 400;
+        position:    relative;
+        z-index:     1;
+    }
+
+    .bc-register-body {
+        padding: 2rem 2.5rem 2.25rem;
+    }
+
+    .bc-form-section {
+        margin-bottom: 0.25rem;
+    }
+
+    .bc-form-section-label {
+        font-size:      0.72rem;
+        font-weight:    600;
+        color:          #1a4fa0;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding:        0.5rem 0 0.6rem;
+        display:        flex;
+        align-items:    center;
+        gap:            0.4rem;
+        margin-bottom:  0.75rem;
+        border-bottom:  1px solid #e2e8f0;
+    }
+
+    .bc-form-section-label .bi {
+        font-size: 0.85rem;
+    }
+
+    .bc-input-group .input-group-text {
+        background-color: #f1f5f9;
+        border-color:     #d1d9e6;
+        border-right:     none;
+        color:            #1a4fa0;
+        font-size:        0.95rem;
+        min-width:        42px;
+        justify-content:  center;
+    }
+
+    .bc-input-group .form-control,
+    .bc-input-group .form-select {
+        border-color:     #d1d9e6;
+        border-left:      none;
+        font-size:        0.875rem;
+        padding:          0.52rem 0.9rem;
+        color:            #1e2d3d;
+        background-color: #ffffff;
+        transition:       border-color 0.2s ease,
+                          box-shadow   0.2s ease;
+    }
+
+    .bc-input-group .form-control:focus,
+    .bc-input-group .form-select:focus {
+        border-color: #1a4fa0;
+        box-shadow:   0 0 0 0.2rem rgba(26, 79, 160, 0.12);
+        outline:      none;
+    }
+
+    .bc-input-group:focus-within .input-group-text {
+        border-color:     #1a4fa0;
+        background-color: #dbeafe;
+        color:            #0d2b5e;
+    }
+
+    .bc-input-group:has(.is-invalid) .input-group-text {
+        border-color:     #dc3545;
+        background-color: #fff5f5;
+        color:            #dc3545;
+    }
+
+    .bc-input-group ~ label,
+    .form-label {
+        font-size:     0.8rem;
+        font-weight:   600;
+        color:         #4a5568;
+        margin-bottom: 0.35rem;
+    }
+
+    .bc-field-error {
+        font-size:      0.75rem;
+        color:          #dc3545;
+        margin-top:     0.3rem;
+        display:        flex;
+        flex-direction: column;
+        gap:            0.15rem;
+    }
+
+    .bc-field-error span {
+        display:     flex;
+        align-items: center;
+        gap:         0.25rem;
+    }
+
+    .bc-field-error .bi {
+        font-size:   0.72rem;
+        flex-shrink: 0;
+    }
+
+    .bc-form-errors-global {
+        background-color: #fff5f5;
+        border:           1px solid #f5c6cb;
+        border-left:      4px solid #dc3545;
+        border-radius:    8px;
+        padding:          0.85rem 1rem;
+        margin-bottom:    1.5rem;
+        font-size:        0.82rem;
+        color:            #721c24;
+    }
+
+    .bc-form-errors-global ul {
+        margin:  0;
+        padding: 0 0 0 1.1rem;
+    }
+
+    .bc-form-errors-global .bc-error-title {
+        font-weight:   600;
+        margin-bottom: 0.35rem;
+        display:       flex;
+        align-items:   center;
+        gap:           0.4rem;
+    }
+
+    .bc-btn-register {
+        background:      linear-gradient(135deg, #1a4fa0 0%, #2e6cc7 100%);
+        border:          none;
+        border-radius:   9px;
+        color:           #ffffff;
+        font-size:       0.9rem;
+        font-weight:     600;
+        padding:         0.7rem 1.5rem;
+        width:           100%;
+        letter-spacing:  0.02em;
+        transition:      background    0.25s ease,
+                         box-shadow    0.25s ease,
+                         transform     0.1s  ease;
+        display:         inline-flex;
+        align-items:     center;
+        justify-content: center;
+        gap:             0.5rem;
+    }
+
+    .bc-btn-register:hover {
+        background:  linear-gradient(135deg, #0d2b5e 0%, #1a4fa0 100%);
+        box-shadow:  0 6px 20px rgba(13, 43, 94, 0.28);
+        color:       #ffffff;
+        transform:   translateY(-1px);
+    }
+
+    .bc-btn-register:active {
+        transform:  translateY(0);
+        box-shadow: 0 2px 8px rgba(13, 43, 94, 0.18);
+    }
+
+    .bc-btn-register:focus {
+        box-shadow: 0 0 0 0.25rem rgba(26, 79, 160, 0.30);
+        outline:    none;
+        color:      #ffffff;
+    }
+
+    .bc-register-footer {
+        padding:    1.25rem 2.5rem 2rem;
+        text-align: center;
+        border-top: 1px solid #f1f5f9;
+    }
+
+    .bc-register-footer p {
+        font-size:     0.82rem;
+        color:         #94a3b8;
+        margin-bottom: 0.3rem;
+    }
+
+    .bc-register-footer a {
+        font-size:       0.85rem;
+        font-weight:     600;
+        color:           #1a4fa0;
+        text-decoration: none;
+        display:         inline-flex;
+        align-items:     center;
+        gap:             0.3rem;
+        transition:      color 0.2s ease;
+    }
+
+    .bc-register-footer a:hover {
+        color:           #0d2b5e;
+        text-decoration: underline;
+    }
+
+    .bc-required {
+        color:       #dc3545;
+        font-size:   0.75rem;
+        margin-left: 2px;
+        line-height: 1;
+    }
+
+    .bc-field-hint {
+        font-size:   0.73rem;
+        color:       #94a3b8;
+        margin-top:  0.3rem;
+        display:     flex;
+        align-items: center;
+        gap:         0.25rem;
+    }
+
+    .bc-field-hint .bi {
+        font-size: 0.7rem;
+    }
+
+    @media (max-width: 575.98px) {
+        .bc-register-header {
+            padding: 1.5rem 1.25rem 1.25rem;
+        }
+
+        .bc-register-body {
+            padding: 1.5rem 1.25rem 1.25rem;
+        }
+
+        .bc-register-footer {
+            padding: 1rem 1.25rem 1.5rem;
+        }
+
+        .bc-register-card {
+            border-radius: 12px;
+        }
+    }
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="bc-register-wrapper">
+    <div class="bc-register-card">
+
+        <div class="bc-register-header">
+            <div class="bc-register-icon-wrap" aria-hidden="true">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+            <h1>Registro de Usuario</h1>
+            <p>
+                <i class="bi bi-building me-1" aria-hidden="true"></i>
+                Sistema de Gestión de Biblioteca
+            </p>
+        </div>
+
+        <div class="bc-register-body">
+            <form
+                action="{% url 'register' %}"
+                method="POST"
+                novalidate
+                aria-label="Formulario de registro de usuario">
+
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="bc-form-errors-global" role="alert" aria-live="polite">
+                        <div class="bc-error-title">
+                            <i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i>
+                            Por favor, corrige los siguientes errores:
+                        </div>
+                        <ul>
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <!-- Identificación Personal -->
+                <div class="bc-form-section">
+                    <div class="bc-form-section-label">
+                        <i class="bi bi-person-vcard" aria-hidden="true"></i>
+                        Identificación Personal
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+
+                    <div class="col-12 col-sm-6">
+                        <label for="id_cedula" class="form-label">
+                            Cédula Ecuatoriana
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="cedula-icon">
+                                <i class="bi bi-credit-card-2-front" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="text"
+                                class="form-control {% if form.cedula.errors %}is-invalid{% endif %}"
+                                id="id_cedula"
+                                name="cedula"
+                                placeholder="0912345678"
+                                maxlength="10"
+                                autocomplete="off"
+                                value="{{ form.cedula.value|default:'' }}"
+                                aria-describedby="cedula-icon cedula-hint"
+                                required>
+                        </div>
+                        {% if form.cedula.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.cedula.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="bc-field-hint" id="cedula-hint">
+                                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                                Ingresa los 10 dígitos de tu cédula
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <label for="id_fecha_nacimiento" class="form-label">
+                            Fecha de Nacimiento
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="fecha-icon">
+                                <i class="bi bi-calendar-event" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="date"
+                                class="form-control {% if form.fecha_nacimiento.errors %}is-invalid{% endif %}"
+                                id="id_fecha_nacimiento"
+                                name="fecha_nacimiento"
+                                value="{{ form.fecha_nacimiento.value|default:'' }}"
+                                aria-describedby="fecha-icon"
+                                required>
+                        </div>
+                        {% if form.fecha_nacimiento.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.fecha_nacimiento.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <!-- Datos Personales -->
+                <div class="bc-form-section">
+                    <div class="bc-form-section-label">
+                        <i class="bi bi-person-lines-fill" aria-hidden="true"></i>
+                        Datos Personales
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+
+                    <div class="col-12 col-sm-6">
+                        <label for="id_nombres" class="form-label">
+                            Nombres
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="nombres-icon">
+                                <i class="bi bi-person" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="text"
+                                class="form-control {% if form.nombres.errors %}is-invalid{% endif %}"
+                                id="id_nombres"
+                                name="nombres"
+                                placeholder="Ej. Juan Andrés"
+                                maxlength="100"
+                                autocomplete="given-name"
+                                value="{{ form.nombres.value|default:'' }}"
+                                aria-describedby="nombres-icon"
+                                required>
+                        </div>
+                        {% if form.nombres.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.nombres.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <label for="id_apellidos" class="form-label">
+                            Apellidos
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="apellidos-icon">
+                                <i class="bi bi-person-badge" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="text"
+                                class="form-control {% if form.apellidos.errors %}is-invalid{% endif %}"
+                                id="id_apellidos"
+                                name="apellidos"
+                                placeholder="Ej. Pérez García"
+                                maxlength="100"
+                                autocomplete="family-name"
+                                value="{{ form.apellidos.value|default:'' }}"
+                                aria-describedby="apellidos-icon"
+                                required>
+                        </div>
+                        {% if form.apellidos.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.apellidos.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12">
+                        <label for="id_direccion" class="form-label">
+                            Dirección
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="direccion-icon">
+                                <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="text"
+                                class="form-control {% if form.direccion.errors %}is-invalid{% endif %}"
+                                id="id_direccion"
+                                name="direccion"
+                                placeholder="Ej. Av. 9 de Octubre y Malecón, Guayaquil"
+                                maxlength="255"
+                                autocomplete="street-address"
+                                value="{{ form.direccion.value|default:'' }}"
+                                aria-describedby="direccion-icon"
+                                required>
+                        </div>
+                        {% if form.direccion.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.direccion.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <!-- Información de Contacto -->
+                <div class="bc-form-section">
+                    <div class="bc-form-section-label">
+                        <i class="bi bi-envelope-at" aria-hidden="true"></i>
+                        Información de Contacto
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-3">
+
+                    <div class="col-12 col-sm-7">
+                        <label for="id_correo" class="form-label">
+                            Correo Electrónico
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="correo-icon">
+                                <i class="bi bi-envelope" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="email"
+                                class="form-control {% if form.correo.errors %}is-invalid{% endif %}"
+                                id="id_correo"
+                                name="correo"
+                                placeholder="usuario@correo.com"
+                                maxlength="254"
+                                autocomplete="email"
+                                value="{{ form.correo.value|default:'' }}"
+                                aria-describedby="correo-icon"
+                                required>
+                        </div>
+                        {% if form.correo.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.correo.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-sm-5">
+                        <label for="id_telefono" class="form-label">
+                            Teléfono
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="telefono-icon">
+                                <i class="bi bi-telephone" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="tel"
+                                class="form-control {% if form.telefono.errors %}is-invalid{% endif %}"
+                                id="id_telefono"
+                                name="telefono"
+                                placeholder="0991234567"
+                                maxlength="15"
+                                autocomplete="tel"
+                                value="{{ form.telefono.value|default:'' }}"
+                                aria-describedby="telefono-icon telefono-hint"
+                                required>
+                        </div>
+                        {% if form.telefono.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.telefono.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="bc-field-hint" id="telefono-hint">
+                                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                                Celular o teléfono fijo
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <!-- Credenciales de Acceso -->
+                <div class="bc-form-section">
+                    <div class="bc-form-section-label">
+                        <i class="bi bi-shield-lock" aria-hidden="true"></i>
+                        Credenciales de Acceso
+                    </div>
+                </div>
+
+                <div class="row g-3 mb-4">
+
+                    <div class="col-12 col-sm-6">
+                        <label for="id_password" class="form-label">
+                            Contraseña
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="password-icon">
+                                <i class="bi bi-lock" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="password"
+                                class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                                id="id_password"
+                                name="password"
+                                placeholder="Mínimo 8 caracteres"
+                                maxlength="128"
+                                autocomplete="new-password"
+                                aria-describedby="password-icon password-hint"
+                                required>
+                        </div>
+                        {% if form.password.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.password.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="bc-field-hint" id="password-hint">
+                                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                                Letras, números y símbolos
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        <label for="id_confirmar_password" class="form-label">
+                            Confirmar Contraseña
+                            <span class="bc-required" aria-hidden="true" title="Campo obligatorio">*</span>
+                        </label>
+                        <div class="input-group bc-input-group">
+                            <span class="input-group-text" id="password-confirm-icon">
+                                <i class="bi bi-lock-fill" aria-hidden="true"></i>
+                            </span>
+                            <input
+                                type="password"
+                                class="form-control {% if form.confirmar_password.errors %}is-invalid{% endif %}"
+                                id="id_confirmar_password"
+                                name="confirmar_password"
+                                placeholder="Repite tu contraseña"
+                                maxlength="128"
+                                autocomplete="new-password"
+                                aria-describedby="password-confirm-icon"
+                                required>
+                        </div>
+                        {% if form.confirmar_password.errors %}
+                            <div class="bc-field-error" role="alert">
+                                {% for error in form.confirmar_password.errors %}
+                                    <span>
+                                        <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
+                                        {{ error }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <p class="bc-field-hint mb-3" style="font-size: 0.76rem;">
+                    <i class="bi bi-asterisk text-danger" aria-hidden="true"></i>
+                    Todos los campos marcados con
+                    <span style="color:#dc3545; font-weight:600;">*</span>
+                    son obligatorios.
+                </p>
+
+                <div class="d-grid mt-2">
+                    <button type="submit" class="bc-btn-register">
+                        <i class="bi bi-person-check-fill" aria-hidden="true"></i>
+                        Registrarse
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="bc-register-footer">
+            <p>¿Ya tienes una cuenta registrada?</p>
+            <a href="{% url 'login' %}" aria-label="Volver a la página de inicio de sesión">
+                <i class="bi bi-arrow-left-circle" aria-hidden="true"></i>
+                Volver al Inicio de Sesión
+            </a>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}{% endblock %}

@@ -1,0 +1,932 @@
+html
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard — Sistema de Gestión de Biblioteca Biblioteca Central">
+    <title>Menú Principal | Biblioteca Central</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+
+    <style>
+
+        :root {
+            --bc-blue-900:   #091a3e;
+            --bc-blue-800:   #0d2b5e;
+            --bc-blue-700:   #133580;
+            --bc-blue-600:   #1a4fa0;
+            --bc-blue-500:   #2260b8;
+            --bc-blue-400:   #2e6cc7;
+            --bc-blue-300:   #5b8fd4;
+            --bc-blue-200:   #90b8f8;
+            --bc-blue-100:   #dbeafe;
+            --bc-blue-50:    #eff6ff;
+
+            --bc-white:      #ffffff;
+            --bc-gray-50:    #f8fafc;
+            --bc-gray-100:   #f1f5f9;
+            --bc-gray-150:   #eaeff6;
+            --bc-gray-200:   #e2e8f0;
+            --bc-gray-300:   #cbd5e1;
+            --bc-gray-400:   #94a3b8;
+            --bc-gray-500:   #64748b;
+            --bc-gray-600:   #4a5568;
+            --bc-gray-700:   #334155;
+            --bc-gray-800:   #1e293b;
+
+            --bc-navbar-h:   64px;
+            --bc-shadow-xs:  0 1px 3px  rgba(9, 26, 62, 0.07);
+            --bc-shadow-sm:  0 2px 8px  rgba(9, 26, 62, 0.09);
+            --bc-shadow-md:  0 4px 20px rgba(9, 26, 62, 0.12);
+            --bc-shadow-lg:  0 8px 32px rgba(9, 26, 62, 0.16);
+            --bc-shadow-xl:  0 16px 48px rgba(9, 26, 62, 0.20);
+            --bc-radius-sm:  8px;
+            --bc-radius-md:  12px;
+            --bc-radius-lg:  16px;
+            --bc-radius-xl:  20px;
+            --bc-transition: 0.22s ease;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family:      'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size:        0.9rem;
+            background-color: var(--bc-gray-50);
+            color:            var(--bc-gray-800);
+            display:          flex;
+            flex-direction:   column;
+            min-height:       100vh;
+            line-height:      1.6;
+        }
+
+        ::-webkit-scrollbar        { width: 7px; }
+        ::-webkit-scrollbar-track  { background: var(--bc-gray-100); }
+        ::-webkit-scrollbar-thumb  { background: var(--bc-gray-300); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--bc-blue-400); }
+
+        .bc-navbar {
+            background-color: var(--bc-blue-800);
+            min-height:       var(--bc-navbar-h);
+            padding:          0 1.5rem;
+            box-shadow:       var(--bc-shadow-md);
+            position:         sticky;
+            top:              0;
+            z-index:          1030;
+        }
+
+        .bc-navbar .navbar-brand {
+            display:         flex;
+            align-items:     center;
+            gap:             0.7rem;
+            text-decoration: none;
+            padding:         0;
+        }
+
+        .bc-brand-icon-wrap {
+            width:            46px;
+            height:           46px;
+            background-color: rgba(255, 255, 255, 0.09);
+            border:           1.5px solid rgba(255, 255, 255, 0.16);
+            border-radius:    11px;
+            display:          flex;
+            align-items:      center;
+            justify-content:  center;
+            flex-shrink:      0;
+            transition:       background-color var(--bc-transition);
+        }
+
+        .bc-navbar .navbar-brand:hover .bc-brand-icon-wrap {
+            background-color: rgba(255, 255, 255, 0.17);
+        }
+
+        .bc-brand-icon-wrap .bi {
+            font-size: 1.6rem;
+            color:     var(--bc-blue-200);
+        }
+
+        .bc-brand-text {
+            display:        flex;
+            flex-direction: column;
+            line-height:    1.2;
+        }
+
+        .bc-brand-text .bc-subtitle {
+            font-size:      0.66rem;
+            font-weight:    500;
+            color:          var(--bc-blue-200);
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+        }
+
+        .bc-brand-text .bc-title {
+            font-size:      1.05rem;
+            font-weight:    700;
+            color:          var(--bc-white);
+            letter-spacing: 0.01em;
+        }
+
+        .bc-nav-divider {
+            width:            1px;
+            height:           28px;
+            background-color: rgba(255, 255, 255, 0.17);
+            margin:           0 0.25rem;
+            flex-shrink:      0;
+        }
+
+        .bc-user-block {
+            display:     flex;
+            align-items: center;
+            gap:         0.55rem;
+        }
+
+        .bc-user-avatar {
+            width:            36px;
+            height:           36px;
+            background-color: var(--bc-blue-600);
+            border:           2px solid rgba(255, 255, 255, 0.22);
+            border-radius:    50%;
+            display:          flex;
+            align-items:      center;
+            justify-content:  center;
+            flex-shrink:      0;
+        }
+
+        .bc-user-avatar .bi {
+            font-size: 1.05rem;
+            color:     var(--bc-white);
+        }
+
+        .bc-user-meta {
+            display:        flex;
+            flex-direction: column;
+            line-height:    1.25;
+        }
+
+        .bc-user-label {
+            font-size:   0.66rem;
+            color:       var(--bc-blue-200);
+            font-weight: 400;
+        }
+
+        .bc-user-name {
+            font-size:     0.85rem;
+            font-weight:   600;
+            color:         var(--bc-white);
+            max-width:     160px;
+            overflow:      hidden;
+            white-space:   nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .bc-btn-logout {
+            display:          inline-flex;
+            align-items:      center;
+            gap:              0.4rem;
+            background-color: rgba(255, 255, 255, 0.07);
+            border:           1px solid rgba(255, 255, 255, 0.2);
+            color:            #e2e8f0;
+            font-size:        0.8rem;
+            font-weight:      500;
+            padding:          0.38rem 0.9rem;
+            border-radius:    7px;
+            text-decoration:  none;
+            white-space:      nowrap;
+            transition:       background-color var(--bc-transition),
+                              border-color     var(--bc-transition),
+                              color            var(--bc-transition);
+        }
+
+        .bc-btn-logout:hover,
+        .bc-btn-logout:focus {
+            background-color: rgba(255, 255, 255, 0.16);
+            border-color:     rgba(255, 255, 255, 0.38);
+            color:            var(--bc-white);
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.35);
+            padding:      0.3rem 0.55rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.15);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255%2C255%2C255%2C0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
+
+        .bc-welcome-section {
+            background:    linear-gradient(135deg, var(--bc-blue-800) 0%, var(--bc-blue-600) 100%);
+            padding:       3rem 0 3.25rem;
+            position:      relative;
+            overflow:      hidden;
+        }
+
+        .bc-welcome-section::before {
+            content:          '';
+            position:         absolute;
+            top:              -80px;
+            right:            -60px;
+            width:            340px;
+            height:           340px;
+            border-radius:    50%;
+            background-color: rgba(255, 255, 255, 0.04);
+            pointer-events:   none;
+        }
+
+        .bc-welcome-section::after {
+            content:          '';
+            position:         absolute;
+            bottom:           -100px;
+            left:             5%;
+            width:            260px;
+            height:           260px;
+            border-radius:    50%;
+            background-color: rgba(255, 255, 255, 0.03);
+            pointer-events:   none;
+        }
+
+        .bc-welcome-inner { position: relative; z-index: 1; }
+
+        .bc-welcome-chip {
+            display:          inline-flex;
+            align-items:      center;
+            gap:              0.4rem;
+            background-color: rgba(255, 255, 255, 0.10);
+            border:           1px solid rgba(255, 255, 255, 0.18);
+            border-radius:    50px;
+            padding:          0.28rem 0.85rem;
+            font-size:        0.73rem;
+            font-weight:      500;
+            color:            var(--bc-blue-200);
+            margin-bottom:    1rem;
+            letter-spacing:   0.04em;
+        }
+
+        .bc-welcome-chip .bi { font-size: 0.8rem; }
+
+        .bc-welcome-title {
+            font-size:     1.75rem;
+            font-weight:   700;
+            color:         var(--bc-white);
+            margin-bottom: 0.6rem;
+            line-height:   1.25;
+        }
+
+        .bc-welcome-title .bc-user-highlight {
+            color:      var(--bc-blue-200);
+            font-style: italic;
+        }
+
+        .bc-welcome-subtitle {
+            font-size:   1rem;
+            color:       rgba(255, 255, 255, 0.70);
+            margin:      0;
+            font-weight: 400;
+        }
+
+        .bc-welcome-divider {
+            width:         60px;
+            height:        3px;
+            background:    linear-gradient(90deg, var(--bc-blue-200), rgba(144, 184, 248, 0));
+            border-radius: 4px;
+            margin-top:    1.25rem;
+        }
+
+        .bc-welcome-stats {
+            display:    flex;
+            gap:        2rem;
+            flex-wrap:  wrap;
+            margin-top: 1.75rem;
+        }
+
+        .bc-stat-item { display: flex; flex-direction: column; }
+
+        .bc-stat-number {
+            font-size:   1.45rem;
+            font-weight: 700;
+            color:       var(--bc-white);
+            line-height: 1;
+        }
+
+        .bc-stat-label {
+            font-size:   0.72rem;
+            color:       var(--bc-blue-200);
+            margin-top:  0.2rem;
+            font-weight: 400;
+        }
+
+        .bc-stat-divider {
+            width:            1px;
+            background-color: rgba(255, 255, 255, 0.15);
+            align-self:       stretch;
+        }
+
+        .bc-dashboard-area { flex: 1; padding: 2.75rem 0 3rem; }
+
+        .bc-section-heading { margin-bottom: 1.75rem; }
+
+        .bc-section-heading .bc-section-label {
+            font-size:      0.7rem;
+            font-weight:    600;
+            color:          var(--bc-blue-600);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display:        flex;
+            align-items:    center;
+            gap:            0.4rem;
+            margin-bottom:  0.3rem;
+        }
+
+        .bc-section-heading .bc-section-label::after {
+            content:          '';
+            flex:             1;
+            height:           1px;
+            background-color: var(--bc-gray-200);
+            margin-left:      0.5rem;
+        }
+
+        .bc-section-heading h2 {
+            font-size:   1.15rem;
+            font-weight: 700;
+            color:       var(--bc-blue-800);
+            margin:      0;
+        }
+
+        .bc-section-heading p {
+            font-size:  0.82rem;
+            color:      var(--bc-gray-500);
+            margin:     0.2rem 0 0;
+        }
+
+        .bc-module-card {
+            background-color: var(--bc-white);
+            border:           1px solid var(--bc-gray-200);
+            border-radius:    var(--bc-radius-lg);
+            box-shadow:       var(--bc-shadow-sm);
+            padding:          2rem 1.5rem 1.75rem;
+            height:           100%;
+            display:          flex;
+            flex-direction:   column;
+            align-items:      center;
+            text-align:       center;
+            cursor:           pointer;
+            text-decoration:  none;
+            color:            inherit;
+            transition:       transform        var(--bc-transition),
+                              box-shadow       var(--bc-transition),
+                              border-color     var(--bc-transition),
+                              background-color var(--bc-transition);
+            position:         relative;
+            overflow:         hidden;
+        }
+
+        .bc-module-card::before {
+            content:    '';
+            position:   absolute;
+            top:        0;
+            left:       0;
+            right:      0;
+            height:     3px;
+            background: linear-gradient(90deg, var(--bc-blue-600), var(--bc-blue-400));
+            opacity:    0;
+            transition: opacity var(--bc-transition);
+        }
+
+        .bc-module-card:hover::before,
+        .bc-module-card:focus::before { opacity: 1; }
+
+        .bc-module-card:hover,
+        .bc-module-card:focus {
+            transform:        translateY(-6px);
+            box-shadow:       var(--bc-shadow-xl);
+            border-color:     var(--bc-blue-200);
+            outline:          none;
+            background-color: var(--bc-white);
+            color:            inherit;
+        }
+
+        .bc-module-icon-wrap {
+            width:            76px;
+            height:           76px;
+            background-color: var(--bc-blue-50);
+            border:           2px solid var(--bc-blue-100);
+            border-radius:    18px;
+            display:          flex;
+            align-items:      center;
+            justify-content:  center;
+            margin-bottom:    1.25rem;
+            flex-shrink:      0;
+            transition:       background-color var(--bc-transition),
+                              border-color     var(--bc-transition),
+                              transform        var(--bc-transition);
+        }
+
+        .bc-module-card:hover .bc-module-icon-wrap {
+            background-color: var(--bc-blue-100);
+            border-color:     var(--bc-blue-300);
+            transform:        scale(1.06);
+        }
+
+        .bc-module-icon-wrap .bi {
+            font-size:  2.1rem;
+            color:      var(--bc-blue-600);
+            transition: color var(--bc-transition);
+        }
+
+        .bc-module-card:hover .bc-module-icon-wrap .bi { color: var(--bc-blue-800); }
+
+        .bc-module-name {
+            font-size:     1rem;
+            font-weight:   700;
+            color:         var(--bc-blue-800);
+            margin-bottom: 0.5rem;
+            line-height:   1.3;
+        }
+
+        .bc-module-desc {
+            font-size:     0.8rem;
+            color:         var(--bc-gray-500);
+            line-height:   1.55;
+            flex:          1;
+            margin-bottom: 1.35rem;
+        }
+
+        .bc-module-btn {
+            display:          inline-flex;
+            align-items:      center;
+            gap:              0.4rem;
+            background-color: var(--bc-blue-50);
+            border:           1.5px solid var(--bc-blue-200);
+            color:            var(--bc-blue-600);
+            font-size:        0.78rem;
+            font-weight:      600;
+            padding:          0.42rem 1.1rem;
+            border-radius:    50px;
+            transition:       background-color var(--bc-transition),
+                              border-color     var(--bc-transition),
+                              color            var(--bc-transition),
+                              transform        var(--bc-transition);
+            text-decoration:  none;
+            white-space:      nowrap;
+        }
+
+        .bc-module-card:hover .bc-module-btn {
+            background-color: var(--bc-blue-600);
+            border-color:     var(--bc-blue-600);
+            color:            var(--bc-white);
+            transform:        scale(1.03);
+        }
+
+        .bc-module-btn .bi { font-size: 0.8rem; }
+
+        .bc-module-card-featured {
+            background:      linear-gradient(160deg, #0d2b5e 0%, #1a4fa0 60%, #2260b8 100%);
+            border:          2px solid rgba(255, 255, 255, 0.15);
+            border-radius:   var(--bc-radius-xl);
+            box-shadow:      var(--bc-shadow-lg),
+                             0 0 0 1px rgba(26, 79, 160, 0.25);
+            padding:         2.5rem 2rem 2.25rem;
+            height:          100%;
+            display:         flex;
+            flex-direction:  column;
+            align-items:     center;
+            text-align:      center;
+            cursor:          pointer;
+            text-decoration: none;
+            color:           inherit;
+            position:        relative;
+            overflow:        hidden;
+            transition:      transform  var(--bc-transition),
+                             box-shadow var(--bc-transition);
+        }
+
+        .bc-module-card-featured::before {
+            content:          '';
+            position:         absolute;
+            top:              -50px;
+            right:            -40px;
+            width:            200px;
+            height:           200px;
+            border-radius:    50%;
+            background-color: rgba(255, 255, 255, 0.05);
+            pointer-events:   none;
+        }
+
+        .bc-module-card-featured::after {
+            content:          '';
+            position:         absolute;
+            bottom:           -60px;
+            left:             -30px;
+            width:            160px;
+            height:           160px;
+            border-radius:    50%;
+            background-color: rgba(255, 255, 255, 0.04);
+            pointer-events:   none;
+        }
+
+        .bc-module-card-featured:hover,
+        .bc-module-card-featured:focus {
+            transform:  translateY(-8px);
+            box-shadow: var(--bc-shadow-xl),
+                        0 0 0 2px rgba(144, 184, 248, 0.35),
+                        0 20px 60px rgba(13, 43, 94, 0.40);
+            outline:    none;
+        }
+
+        .bc-featured-badge {
+            position:         absolute;
+            top:              1rem;
+            right:            1rem;
+            background-color: rgba(255, 255, 255, 0.15);
+            border:           1px solid rgba(255, 255, 255, 0.25);
+            color:            var(--bc-blue-200);
+            font-size:        0.64rem;
+            font-weight:      700;
+            padding:          0.2rem 0.65rem;
+            border-radius:    50px;
+            text-transform:   uppercase;
+            letter-spacing:   0.08em;
+            z-index:          1;
+            display:          flex;
+            align-items:      center;
+            gap:              0.3rem;
+        }
+
+        .bc-module-icon-wrap-featured {
+            width:            88px;
+            height:           88px;
+            background-color: rgba(255, 255, 255, 0.12);
+            border:           2px solid rgba(255, 255, 255, 0.20);
+            border-radius:    22px;
+            display:          flex;
+            align-items:      center;
+            justify-content:  center;
+            margin-bottom:    1.4rem;
+            flex-shrink:      0;
+            position:         relative;
+            z-index:          1;
+            transition:       background-color var(--bc-transition),
+                              transform        var(--bc-transition);
+        }
+
+        .bc-module-card-featured:hover .bc-module-icon-wrap-featured {
+            background-color: rgba(255, 255, 255, 0.20);
+            transform:        scale(1.07);
+        }
+
+        .bc-module-icon-wrap-featured .bi { font-size: 2.5rem; color: #90b8f8; }
+
+        .bc-module-name-featured {
+            font-size:     1.2rem;
+            font-weight:   700;
+            color:         var(--bc-white);
+            margin-bottom: 0.55rem;
+            position:      relative;
+            z-index:       1;
+        }
+
+        .bc-module-desc-featured {
+            font-size:     0.82rem;
+            color:         rgba(255, 255, 255, 0.70);
+            line-height:   1.55;
+            flex:          1;
+            margin-bottom: 1.5rem;
+            position:      relative;
+            z-index:       1;
+        }
+
+        .bc-module-btn-featured {
+            display:          inline-flex;
+            align-items:      center;
+            gap:              0.4rem;
+            background-color: var(--bc-white);
+            border:           none;
+            color:            var(--bc-blue-700);
+            font-size:        0.82rem;
+            font-weight:      700;
+            padding:          0.5rem 1.4rem;
+            border-radius:    50px;
+            text-decoration:  none;
+            white-space:      nowrap;
+            position:         relative;
+            z-index:          1;
+            transition:       background-color var(--bc-transition),
+                              color            var(--bc-transition),
+                              transform        var(--bc-transition),
+                              box-shadow       var(--bc-transition);
+        }
+
+        .bc-module-card-featured:hover .bc-module-btn-featured {
+            background-color: var(--bc-blue-100);
+            color:            var(--bc-blue-900);
+            transform:        scale(1.04);
+            box-shadow:       0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .bc-module-btn-featured .bi { font-size: 0.85rem; }
+
+        .bc-footer {
+            background-color: var(--bc-blue-800);
+            min-height:       56px;
+            display:          flex;
+            align-items:      center;
+            justify-content:  center;
+            padding:          0.75rem 1rem;
+        }
+
+        .bc-footer-inner { text-align: center; line-height: 1.6; }
+
+        .bc-footer-brand {
+            font-size:      0.8rem;
+            font-weight:    700;
+            color:          var(--bc-white);
+            letter-spacing: 0.02em;
+        }
+
+        .bc-footer-info { font-size: 0.74rem; color: var(--bc-blue-200); margin: 0; }
+
+        .bc-footer-separator {
+            display: inline-block;
+            margin:  0 0.45rem;
+            color:   rgba(255, 255, 255, 0.25);
+        }
+
+        @media (max-width: 991.98px) { .bc-welcome-stats { gap: 1.25rem; } }
+
+        @media (max-width: 767.98px) {
+            .bc-welcome-title    { font-size: 1.4rem; }
+            .bc-welcome-subtitle { font-size: 0.9rem; }
+            .bc-stat-divider     { display: none; }
+            .bc-welcome-stats    { flex-direction: column; gap: 0.85rem; }
+        }
+
+        @media (max-width: 575.98px) {
+            .bc-welcome-section      { padding: 2.25rem 0 2.5rem; }
+            .bc-dashboard-area       { padding: 2rem 0 2.5rem; }
+            .bc-module-card          { padding: 1.75rem 1.25rem 1.5rem; }
+            .bc-module-card-featured { padding: 2rem 1.5rem 1.75rem; }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="bc-navbar navbar navbar-expand-lg" role="navigation" aria-label="Navegación principal">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="{% url 'menu' %}">
+                <div class="bc-brand-icon-wrap" aria-hidden="true">
+                    <i class="bi bi-book-half"></i>
+                </div>
+                <div class="bc-brand-text">
+                    <span class="bc-subtitle">Sistema de Gestión</span>
+                    <span class="bc-title">Biblioteca Central</span>
+                </div>
+            </a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse"
+                aria-expanded="false"
+                aria-label="Expandir menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="ms-auto d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-3 py-2 py-lg-0">
+
+                    <div class="bc-user-block">
+                        <div class="bc-user-avatar" aria-hidden="true">
+                            <i class="bi bi-person-fill"></i>
+                        </div>
+                        <div class="bc-user-meta">
+                            <span class="bc-user-label">Sesión activa</span>
+                            <span class="bc-user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+                        </div>
+                    </div>
+
+                    <div class="bc-nav-divider d-none d-lg-block" aria-hidden="true"></div>
+
+                    <a href="{% url 'logout' %}" class="bc-btn-logout" aria-label="Cerrar sesión del sistema">
+                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                        Cerrar Sesión
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </nav>
+
+
+    <section class="bc-welcome-section" aria-label="Bienvenida al sistema">
+        <div class="container">
+            <div class="bc-welcome-inner">
+
+                <div class="bc-welcome-chip">
+                    <i class="bi bi-grid-3x3-gap-fill" aria-hidden="true"></i>
+                    Panel de Administración
+                </div>
+
+                <h1 class="bc-welcome-title">
+                    Bienvenido, {{ request.user.first_name|default:request.user.username }}<br>
+                    <span class="bc-user-highlight">Gestión de Biblioteca</span>
+                </h1>
+
+                <p class="bc-welcome-subtitle">
+                    <i class="bi bi-mouse2 me-1" aria-hidden="true"></i>
+                    Seleccione el módulo que desea administrar.
+                </p>
+
+                <div class="bc-welcome-divider" aria-hidden="true"></div>
+
+                <div class="bc-welcome-stats" role="region" aria-label="Estadísticas del sistema">
+                    <div class="bc-stat-item">
+                        <span class="bc-stat-number">5</span>
+                        <span class="bc-stat-label">Módulos activos</span>
+                    </div>
+                    <div class="bc-stat-divider" aria-hidden="true"></div>
+                    <div class="bc-stat-item">
+                        <span class="bc-stat-number">{{ total_libros }}</span>
+                        <span class="bc-stat-label">Libros registrados</span>
+                    </div>
+                    <div class="bc-stat-divider" aria-hidden="true"></div>
+                    <div class="bc-stat-item">
+                        <span class="bc-stat-number">{{ total_prestamos }}</span>
+                        <span class="bc-stat-label">Préstamos activos</span>
+                    </div>
+                    <div class="bc-stat-divider" aria-hidden="true"></div>
+                    <div class="bc-stat-item">
+                        <span class="bc-stat-number">{{ total_usuarios }}</span>
+                        <span class="bc-stat-label">Usuarios registrados</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <main class="bc-dashboard-area" id="main-content">
+        <div class="container">
+
+            <div class="bc-section-heading">
+                <div class="bc-section-label">
+                    <i class="bi bi-grid" aria-hidden="true"></i>
+                    Módulos del sistema
+                </div>
+                <h2>Menú Principal</h2>
+                <p>Acceda rápidamente a cada módulo de administración.</p>
+            </div>
+
+            <div class="row g-4 mb-4">
+
+                <div class="col-12 col-md-5">
+                    <a href="{% url 'lista_libros' %}" class="bc-module-card-featured" role="button" aria-label="Ir al módulo de Libros">
+
+                        <div class="bc-featured-badge" aria-label="Módulo principal">
+                            <i class="bi bi-star-fill" aria-hidden="true"></i>
+                            Principal
+                        </div>
+
+                        <div class="bc-module-icon-wrap-featured" aria-hidden="true">
+                            <i class="bi bi-book-fill"></i>
+                        </div>
+
+                        <h2 class="bc-module-name-featured">Libros</h2>
+
+                        <p class="bc-module-desc-featured">
+                            Administra el catálogo completo de libros.<br>
+                            Registra, edita y controla el inventario del fondo bibliográfico.
+                        </p>
+
+                        <span class="bc-module-btn-featured">
+                            <i class="bi bi-arrow-right-circle-fill" aria-hidden="true"></i>
+                            Gestionar Libros
+                        </span>
+
+                    </a>
+                </div>
+
+                <div class="col-12 col-md-7">
+                    <div class="row g-4 h-100">
+
+                        <div class="col-12 col-sm-6">
+                            <a href="{% url 'lista_autores' %}" class="bc-module-card" role="button" aria-label="Ir al módulo de Autores">
+
+                                <div class="bc-module-icon-wrap" aria-hidden="true">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+
+                                <h3 class="bc-module-name">Autores</h3>
+
+                                <p class="bc-module-desc">
+                                    Gestiona los autores asociados al catálogo bibliográfico del sistema.
+                                </p>
+
+                                <span class="bc-module-btn">
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                    Gestionar
+                                </span>
+
+                            </a>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <a href="{% url 'lista_categorias' %}" class="bc-module-card" role="button" aria-label="Ir al módulo de Categorías">
+
+                                <div class="bc-module-icon-wrap" aria-hidden="true">
+                                    <i class="bi bi-tags-fill"></i>
+                                </div>
+
+                                <h3 class="bc-module-name">Categorías</h3>
+
+                                <p class="bc-module-desc">
+                                    Organiza y clasifica los libros mediante categorías temáticas.
+                                </p>
+
+                                <span class="bc-module-btn">
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                    Gestionar
+                                </span>
+
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row g-4 justify-content-center">
+
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a href="{% url 'lista_prestamos' %}" class="bc-module-card" role="button" aria-label="Ir al módulo de Préstamos">
+
+                        <div class="bc-module-icon-wrap" aria-hidden="true">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                        </div>
+
+                        <h3 class="bc-module-name">Préstamos</h3>
+
+                        <p class="bc-module-desc">
+                            Controla los préstamos activos, historial y devoluciones de libros.
+                        </p>
+
+                        <span class="bc-module-btn">
+                            <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            Gestionar
+                        </span>
+
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+
+    <footer class="bc-footer" role="contentinfo">
+        <div class="bc-footer-inner">
+            <p class="bc-footer-brand mb-0">
+                <i class="bi bi-book me-1" aria-hidden="true"></i>
+                Biblioteca Central
+            </p>
+            <p class="bc-footer-info mb-0">
+                Sistema de Gestión de Biblioteca
+                <span class="bc-footer-separator" aria-hidden="true">|</span>
+                &copy; {% now "Y" %}&nbsp;&mdash;&nbsp;Todos los derechos reservados
+            </p>
+        </div>
+    </footer>
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc4s9bIOgUxi8T/jzmDYVBi4bL3QEckHMBFMAnliOGLZ"
+        crossorigin="anonymous">
+    </script>
+
+</body>
+</html>
